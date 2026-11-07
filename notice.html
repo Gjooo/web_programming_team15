@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>공지사항</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/notice.css" />
+</head>
+<body>
+  <div class="app">
+    <!-- 왼쪽 메뉴 -->
+    <aside class="sidebar">
+      <button class="profile" type="button" aria-label="계정 메뉴">
+        <div class="avatar">
+          <img src="icons/user.svg" alt="" />
+        </div>
+        <div class="profile-info">
+          <div class="profile-name" id="profile-name">이름</div>
+          <div class="profile-sub" id="profile-sub">학번</div>
+        </div>
+        <img class="chevron" src="icons/chevron-down.svg" alt="" />
+      </button>
+
+      <nav class="nav">
+        <a href="layout.html">
+          <img src="icons/home.svg" alt="" />
+          <span>대시보드</span>
+        </a>
+        <a href="calendar.html">
+          <img src="icons/calendar.svg" alt="" />
+          <span>캘린더</span>
+        </a>
+        <a href="todo.html">
+          <img src="icons/todo.svg" alt="" />
+          <span>할 일</span>
+        </a>
+        <a href="notice.html" class="active">
+          <img src="icons/notice.svg" alt="" />
+          <span>공지사항</span>
+        </a>
+        <a href="settings.html">
+          <img src="icons/settings.svg" alt="" />
+          <span>설정</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- 메인 영역: 페이지별 내용이 들어갈 자리 -->
+    <main class="main" id="main">
+      <header class="page-header">
+        <h1 class="page-title">공지사항</h1>
+        <button class="icon-btn" type="button" aria-label="공지 검색">
+          <img src="icons/search.svg" alt="" />
+        </button>
+      </header>
+
+      <section class="card">
+        <!-- data-src: 출처별 공지 -->
+        <!-- TODO: data-src 채우기 -->
+        <div class="tabs" role="tablist">
+          <button class="tab active" type="button" data-tab="all">전체</button>
+          <button class="tab" type="button" data-tab="dept" data-src="">학과</button>
+          <button class="tab" type="button" data-tab="insta" data-src="">인스타</button>
+          <button class="tab" type="button" data-tab="college" data-src="">단과대</button>
+          <button class="tab" type="button" data-tab="pr" data-src="">홍보센터</button>
+        </div>
+
+        <!-- 전체 공지 모음 -->
+        <ul class="notice-list" id="notice-list">
+          <li class="notice-item">
+            <div class="notice-thumb"></div>
+            <div class="notice-body">
+              <span class="badge">인스타</span>
+              <p class="notice-title"><a href="#">공지 제목</a></p>
+              <p class="notice-meta">등록일 : 2026.10.16 | 조회수 0</p>
+            </div>
+          </li>
+          <li class="notice-item">
+            <div class="notice-thumb"></div>
+            <div class="notice-body">
+              <span class="badge">학과</span>
+              <p class="notice-title"><a href="#">공지 제목</a></p>
+              <p class="notice-meta">등록일 : 2026.10.16 | 조회수 0</p>
+            </div>
+          </li>
+          <li class="notice-item">
+            <div class="notice-thumb"></div>
+            <div class="notice-body">
+              <span class="badge">단과대</span>
+              <p class="notice-title"><a href="#">공지 제목</a></p>
+              <p class="notice-meta">등록일 : 2026.10.16 | 조회수 0</p>
+            </div>
+          </li>
+          <li class="notice-item">
+            <div class="notice-thumb"></div>
+            <div class="notice-body">
+              <span class="badge">홍보센터</span>
+              <p class="notice-title"><a href="#">공지 제목</a></p>
+              <p class="notice-meta">등록일 : 2026.10.16 | 조회수 0</p>
+            </div>
+          </li>
+        </ul>
+
+        <!-- 학과, 인스타, 단과대, 홍보센터: 원본 페이지 iframe -->
+        <iframe class="notice-frame" id="notice-frame" title="공지사항 원본 페이지" hidden></iframe>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // 공지사항 탭 전환: 전체는 목록, 나머지는 iframe
+    const tabs = document.querySelectorAll('.tab');
+    const list = document.getElementById('notice-list');
+    const frame = document.getElementById('notice-frame');
+
+    tabs.forEach(tab => tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.toggle('active', t === tab));
+      const isAll = tab.dataset.tab === 'all';
+      list.hidden = !isAll;
+      frame.hidden = isAll;
+      if (!isAll) frame.src = tab.dataset.src || 'about:blank';
+    }));
+  </script>
+</body>
+</html>
