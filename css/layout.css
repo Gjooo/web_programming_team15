@@ -1,0 +1,149 @@
+:root {
+  /* 앱 배경 */
+  --sidebar-bg: #ffffff;
+  --main-bg: #dde7f5;
+
+  /* 텍스트 (아이콘 색은 icons/*.svg 파일 안에 지정) */
+  --text: #2f3440;
+  --text-sub: #9097a3;
+
+  /* 활성 메뉴 */
+  --active-bg: #d6e3f6;
+  --active-text: #2a5aa8;
+
+  /* 아바타 */
+  --avatar-bg: #dbe7f8;
+
+  --sidebar-width: 248px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body { height: 100%; }
+
+body {
+  font-family: "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  color: var(--text);
+  background: var(--main-bg);
+}
+
+/* ===== 앱 전체 ===== */
+.app {
+  display: flex;
+  min-height: 100vh;
+  background: var(--main-bg);
+}
+
+/* ===== 왼쪽 메뉴 ===== */
+.sidebar {
+  width: var(--sidebar-width);
+  flex-shrink: 0;
+  background: var(--sidebar-bg);
+  padding: 26px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/* 프로필 */
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 8px;
+  border: none;
+  background: none;
+  border-radius: 14px;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  transition: background .15s;
+}
+.profile:hover { background: #f3f6fb; }
+
+.avatar {
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  border-radius: 14px;
+  background: var(--avatar-bg);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 2px 6px rgba(58, 111, 198, 0.15);
+}
+.avatar img { width: 28px; height: 28px; }
+
+.profile-info { flex: 1; min-width: 0; }
+.profile-name {
+  font-size: 15px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.profile-sub {
+  font-size: 12px;
+  color: var(--text-sub);
+  margin-top: 2px;
+}
+.profile .chevron { width: 18px; height: 18px; }
+
+/* 메뉴 목록 */
+.nav { display: flex; flex-direction: column; gap: 10px; }
+
+.nav a {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  height: 52px;
+  padding: 0 18px;
+  border-radius: 12px;
+  color: var(--text);
+  text-decoration: none;
+  font-size: 17px;
+  font-weight: 500;
+  transition: background .15s, color .15s;
+}
+.nav a img {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+.nav a:hover { background: #f1f5fb; }
+
+.nav a.active {
+  background: var(--active-bg);
+  color: var(--active-text);
+  font-weight: 600;
+}
+
+/* ===== 메인 영역 (페이지별 내용이 들어갈 자리) ===== */
+.main {
+  flex: 1;
+  min-width: 0;
+  padding: 36px 40px;
+}
+
+/* ===== 반응형 ===== */
+@media (max-width: 960px) {
+  :root { --sidebar-width: 84px; }
+  .profile-info, .profile .chevron, .nav a span { display: none; }
+  .profile { justify-content: center; padding: 6px 0; }
+  .nav a { justify-content: center; padding: 0; }
+}
+
+@media (max-width: 560px) {
+  .app { flex-direction: column-reverse; }
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    padding: 8px 10px;
+    gap: 0;
+    border-top: 1px solid #e6ebf3;
+  }
+  .profile { display: none; }
+  .nav { flex-direction: row; flex: 1; justify-content: space-around; gap: 4px; }
+  .nav a { height: 48px; flex: 1; }
+  .main { padding: 24px 16px; }
+}
