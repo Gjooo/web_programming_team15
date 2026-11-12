@@ -51,77 +51,76 @@
     <main class="main" id="main">
       <header class="page-header">
         <h1 class="page-title">공지사항</h1>
-        <button class="icon-btn" type="button" aria-label="공지 검색">
-          <img src="icons/search.svg" alt="" />
-        </button>
+        <div class="search">
+          <input class="search-input" id="search-input" type="search" placeholder="공지 제목 검색" aria-label="공지 제목 검색" hidden />
+          <button class="icon-btn" id="search-btn" type="button" aria-label="공지 검색">
+            <img src="icons/search.svg" alt="" />
+          </button>
+        </div>
       </header>
 
       <section class="card">
-        <!-- data-src: 출처별 공지 -->
-        <!-- TODO: data-src 채우기 -->
+        <!-- data-src: 출처별 공지 주소, 공백으로 구분 -->
         <div class="tabs" role="tablist">
           <button class="tab active" type="button" data-tab="all">전체</button>
-          <button class="tab" type="button" data-tab="dept" data-src="">학과</button>
-          <button class="tab" type="button" data-tab="insta" data-src="">인스타</button>
-          <button class="tab" type="button" data-tab="college" data-src="">단과대</button>
-          <button class="tab" type="button" data-tab="pr" data-src="">홍보센터</button>
+          <button class="tab" type="button" data-tab="college" data-src="https://ai.ssu.ac.kr/board/notice">단과대</button>
+          <button class="tab" type="button" data-tab="pr" data-src="https://scatch.ssu.ac.kr/%EA%B3%B5%EC%A7%80%EC%82%AC%ED%95%AD/">홍보센터</button>
+          <button class="tab" type="button" data-tab="insta" data-src="https://www.instagram.com/soongsil1897/embed/ https://www.instagram.com/focussu.66th/embed/ https://www.instagram.com/ai_soongsil/embed/ https://www.instagram.com/ssu_aisw/embed/ https://www.instagram.com/ssu_it_dept/embed/">인스타</button>
         </div>
 
-        <!-- 전체 공지 모음 -->
+        <!-- 전체 공지 모음: 출처마다 가장 최신 공지 하나씩 (인스타는 계정마다 하나) -->
+        <!-- TODO: 서버에서 최신 공지 받아서 표시 -->
         <ul class="notice-list" id="notice-list">
           <li class="notice-item">
-            <div class="notice-thumb"></div>
-            <div class="notice-body">
-              <span class="badge">인스타</span>
-              <p class="notice-title"><a href="#">공지 제목</a></p>
-              <p class="notice-meta">등록일 : 2026.10.16 | 조회수 0</p>
-            </div>
+            <span class="badge">홍보센터</span>
+            <a class="notice-title" target="_blank" rel="noopener">불러오는 중</a>
+            <span class="notice-date"></span>
+            <p class="notice-desc"></p>
           </li>
           <li class="notice-item">
-            <div class="notice-thumb"></div>
-            <div class="notice-body">
-              <span class="badge">학과</span>
-              <p class="notice-title"><a href="#">공지 제목</a></p>
-              <p class="notice-meta">등록일 : 2026.10.16 | 조회수 0</p>
-            </div>
+            <span class="badge">단과대</span>
+            <a class="notice-title" target="_blank" rel="noopener">불러오는 중</a>
+            <span class="notice-date"></span>
+            <p class="notice-desc"></p>
           </li>
           <li class="notice-item">
-            <div class="notice-thumb"></div>
-            <div class="notice-body">
-              <span class="badge">단과대</span>
-              <p class="notice-title"><a href="#">공지 제목</a></p>
-              <p class="notice-meta">등록일 : 2026.10.16 | 조회수 0</p>
-            </div>
+            <span class="badge">인스타</span>
+            <a class="notice-title" target="_blank" rel="noopener">불러오는 중</a>
+            <span class="notice-date"></span>
+            <p class="notice-desc"></p>
           </li>
           <li class="notice-item">
-            <div class="notice-thumb"></div>
-            <div class="notice-body">
-              <span class="badge">홍보센터</span>
-              <p class="notice-title"><a href="#">공지 제목</a></p>
-              <p class="notice-meta">등록일 : 2026.10.16 | 조회수 0</p>
-            </div>
+            <span class="badge">인스타</span>
+            <a class="notice-title" target="_blank" rel="noopener">불러오는 중</a>
+            <span class="notice-date"></span>
+            <p class="notice-desc"></p>
+          </li>
+          <li class="notice-item">
+            <span class="badge">인스타</span>
+            <a class="notice-title" target="_blank" rel="noopener">불러오는 중</a>
+            <span class="notice-date"></span>
+            <p class="notice-desc"></p>
+          </li>
+          <li class="notice-item">
+            <span class="badge">인스타</span>
+            <a class="notice-title" target="_blank" rel="noopener">불러오는 중</a>
+            <span class="notice-date"></span>
+            <p class="notice-desc"></p>
+          </li>
+          <li class="notice-item">
+            <span class="badge">인스타</span>
+            <a class="notice-title" target="_blank" rel="noopener">불러오는 중</a>
+            <span class="notice-date"></span>
+            <p class="notice-desc"></p>
           </li>
         </ul>
 
-        <!-- 학과, 인스타, 단과대, 홍보센터: 원본 페이지 iframe -->
-        <iframe class="notice-frame" id="notice-frame" title="공지사항 원본 페이지" hidden></iframe>
+        <!-- 단과대, 홍보센터, 인스타: 원본 페이지 iframe -->
+        <div class="notice-frames" id="notice-frames" hidden></div>
       </section>
     </main>
   </div>
 
-  <script>
-    // 공지사항 탭 전환: 전체는 목록, 나머지는 iframe
-    const tabs = document.querySelectorAll('.tab');
-    const list = document.getElementById('notice-list');
-    const frame = document.getElementById('notice-frame');
-
-    tabs.forEach(tab => tab.addEventListener('click', () => {
-      tabs.forEach(t => t.classList.toggle('active', t === tab));
-      const isAll = tab.dataset.tab === 'all';
-      list.hidden = !isAll;
-      frame.hidden = isAll;
-      if (!isAll) frame.src = tab.dataset.src || 'about:blank';
-    }));
-  </script>
+  <script src="scripts/notice.js"></script>
 </body>
 </html>
