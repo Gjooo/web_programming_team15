@@ -3,51 +3,56 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 20px;
+  min-height: 36px;
+  margin-bottom: 12px;
 }
-.page-title { font-size: 30px; font-weight: 700; }
+.page-title {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
 
 .icon-btn {
-  width: 40px;
-  height: 40px;
-  border: none;
-  border-radius: 12px;
-  background: #fff;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: none;
   display: grid;
   place-items: center;
   cursor: pointer;
 }
-.icon-btn img { width: 20px; height: 20px; }
+.icon-btn:hover { background: var(--hover-bg); }
+.icon-btn img { width: 18px; height: 18px; }
 
 /* 검색 */
-.search { display: flex; align-items: center; gap: 8px; }
+.search { display: flex; align-items: center; gap: 6px; }
 .search-input {
-  width: 220px;
+  width: 240px;
   max-width: 50vw;
-  height: 40px;
-  padding: 0 14px;
-  border: none;
-  border-radius: 12px;
-  background: #fff;
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--main-bg);
   font: inherit;
   font-size: 16px;
   color: var(--text);
 }
-
-.card {
-  background: #fff;
-  border: 1px solid #e6ebf3;
-  border-radius: 12px;
-  padding: 8px 24px 16px;
-}
+.search-input::placeholder { color: var(--text-sub); }
 
 /* 탭 */
-.tabs { display: flex; border-bottom: 1px solid #e6ebf3; }
+.tabs {
+  display: flex;
+  gap: 24px;
+  border-bottom: 1px solid var(--line);
+}
 .tab {
-  flex: 1;
-  height: 48px;
+  height: 46px;
+  padding: 0 2px;
+  margin-bottom: -1px;
   border: none;
-  border-bottom: 2px solid transparent;
+  border-bottom: 3px solid transparent;
   background: none;
   font: inherit;
   font-size: 17px;
@@ -56,35 +61,39 @@
 }
 .tab:hover { color: var(--text); }
 .tab.active {
-  color: var(--active-text);
-  border-bottom-color: var(--active-text);
-  font-weight: 600;
+  color: var(--text);
+  border-bottom-color: var(--ink);
+  font-weight: 700;
 }
+/* 출처 탭은 밑줄을 출처 색으로 */
+.tab.active[data-tab="pr"] { border-bottom-color: var(--src-pr); }
+.tab.active[data-tab="college"] { border-bottom-color: var(--src-college); }
+.tab.active[data-tab="insta"] { border-bottom-color: var(--src-insta); }
 
 /* 전체 탭: 공지 목록 */
 .notice-list { list-style: none; }
-/* 첫 줄: 종류, 제목, 날짜 / 둘째 줄: 내용 */
+/* 첫 줄: 종류, 제목, 날짜 / 둘째 줄: 내용 (제목 열에 맞춤) */
 .notice-item {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr) auto;
   align-items: baseline;
-  gap: 6px 12px;
-  padding: 16px 0;
-  border-bottom: 1px solid #eef2f8;
-  font-size: 18px;
+  gap: 2px 16px;
+  padding: 14px 10px;
+  border-bottom: 1px solid var(--line);
+  font-size: 17px;
 }
-.notice-item:last-child { border-bottom: none; }
+.notice-item:hover { background: var(--sidebar-bg); }
 .notice-item[hidden] { display: none; }
 .badge {
-  flex-shrink: 0;
-  min-width: 4.2em;
-  color: var(--active-text);
-  font-size: 16px;
-  font-weight: 700;
+  color: var(--text-sub);
+  font-size: 15px;
+  font-weight: 600;
 }
+/* 출처 색 */
+.badge[data-source="pr"] { color: var(--src-pr); }
+.badge[data-source="college"] { color: var(--src-college); }
+.badge[data-source="insta"] { color: var(--src-insta); }
 .notice-title {
-  flex: 1;
-  min-width: 0;
   color: inherit;
   font-weight: 500;
   letter-spacing: -0.01em;
@@ -93,17 +102,19 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.notice-title:hover { text-decoration: underline; }
+.notice-title:hover {
+  color: var(--active-text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
 .notice-date {
-  flex-shrink: 0;
   font-size: 15px;
   color: var(--text-sub);
   font-variant-numeric: tabular-nums;
 }
 /* 내용 */
 .notice-desc {
-  flex-basis: 100%;
-  padding-left: calc(16px * 4.2 + 12px);
+  grid-column: 2;
   font-size: 15px;
   color: var(--text-sub);
   white-space: nowrap;
@@ -113,17 +124,16 @@
 
 /* 종류별 탭 iframe */
 .notice-frames { margin-top: 12px; }
-/* 주소가 여러 개면 인스타로 간주하고 나란히 배치 */
-.notice-frames.multi {
+/* 인스타 탭은 계정별로 나란히 배치 */
+.notice-frames[data-tab="insta"] {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   align-items: start;
-  gap: 24px;
+  gap: 16px;
 }
 /* 계정별 블록 */
-.notice-frames.multi .notice-frame {
+.notice-frames[data-tab="insta"] .notice-frame {
   height: 500px;
-  border: 1px solid #d5deeb;
   background: #fff;
 }
 .notice-frames[hidden] { display: none; }
@@ -131,17 +141,13 @@
   display: block;
   width: 100%;
   height: calc(100vh - 200px);
-  border: none;
-  border-radius: 10px;
-  background: #f5f8fc;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--sidebar-bg);
 }
 
 @media (max-width: 560px) {
-  .card { padding: 4px 14px 12px; }
-  .tab { font-size: 15px; }
-  .notice-item { gap: 4px 8px; font-size: 16px; }
-  .badge { font-size: 14px; }
-  .notice-date { font-size: 13px; }
-  .notice-desc { padding-left: calc(14px * 4.2 + 8px); font-size: 13px; }
+  .tabs { gap: 20px; }
+  .notice-item { grid-template-columns: 62px minmax(0, 1fr) auto; column-gap: 10px; padding: 14px 4px; }
   .notice-frame { height: calc(100vh - 230px); }
 }

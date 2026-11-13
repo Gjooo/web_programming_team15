@@ -1,20 +1,36 @@
 :root {
   /* 앱 배경 */
-  --sidebar-bg: #ffffff;
-  --main-bg: #dde7f5;
+  --sidebar-bg: #f7f8fa;
+  --main-bg: #ffffff;
 
   /* 텍스트 (아이콘 색은 icons/*.svg 파일 안에 지정) */
-  --text: #2f3440;
-  --text-sub: #9097a3;
+  --text: #1c1f26;
+  --text-sub: #6a7180;
+
+  /* 구분선, 호버 */
+  --line: #e2e5ea;
+  --hover-bg: #eef0f3;
 
   /* 활성 메뉴 */
-  --active-bg: #d6e3f6;
-  --active-text: #2a5aa8;
+  --active-bg: #e6e9ee;
+  --active-text: #1a4b9b;
 
   /* 아바타 */
-  --avatar-bg: #dbe7f8;
+  --avatar-bg: #4b5260;
 
-  --sidebar-width: 248px;
+  /* 선택된 메뉴: 먹색 바탕에 흰 글씨 */
+  --ink: #1c1f26;
+  --on-ink: #ffffff;
+
+  /* 공지 출처별 색 (탭 밑줄, 목록 표시에 같이 사용) */
+  --src-pr: #1a4b9b;
+  --src-college: #1f7a4d;
+  --src-insta: #c2337a;
+
+  /* 모서리는 한 가지 값만 사용 */
+  --radius: 6px;
+
+  --sidebar-width: 232px;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -25,6 +41,11 @@ body {
   font-family: "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
   color: var(--text);
   background: var(--main-bg);
+}
+
+a:focus-visible, button:focus-visible, input:focus-visible {
+  outline: 2px solid var(--active-text);
+  outline-offset: 1px;
 }
 
 /* ===== 앱 전체 ===== */
@@ -39,66 +60,67 @@ body {
   width: var(--sidebar-width);
   flex-shrink: 0;
   background: var(--sidebar-bg);
-  padding: 26px 14px;
+  border-right: 1px solid var(--line);
+  padding: 16px 12px;
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 20px;
 }
 
 /* 프로필 */
 .profile {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   padding: 6px 8px;
   border: none;
   background: none;
-  border-radius: 14px;
+  border-radius: var(--radius);
   cursor: pointer;
   font: inherit;
   color: inherit;
   text-align: left;
   transition: background .15s;
 }
-.profile:hover { background: #f3f6fb; }
+.profile:hover { background: var(--hover-bg); }
 
 .avatar {
-  width: 46px;
-  height: 46px;
+  width: 36px;
+  height: 36px;
   flex-shrink: 0;
-  border-radius: 14px;
+  border-radius: var(--radius);
   background: var(--avatar-bg);
   display: grid;
   place-items: center;
-  box-shadow: 0 2px 6px rgba(58, 111, 198, 0.15);
 }
-.avatar img { width: 28px; height: 28px; }
+.avatar img { width: 22px; height: 22px; filter: brightness(0) invert(1); }
 
 .profile-info { flex: 1; min-width: 0; }
 .profile-name {
-  font-size: 15px;
-  font-weight: 700;
+  font-size: 16px;
+  font-weight: 600;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .profile-sub {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--text-sub);
-  margin-top: 2px;
+  margin-top: 1px;
+  font-variant-numeric: tabular-nums;
 }
-.profile .chevron { width: 18px; height: 18px; }
+.profile .chevron { width: 16px; height: 16px; }
 
 /* 메뉴 목록 */
-.nav { display: flex; flex-direction: column; gap: 10px; }
+.nav { display: flex; flex-direction: column; gap: 2px; }
 
 .nav a {
   display: flex;
   align-items: center;
-  gap: 14px;
-  height: 52px;
-  padding: 0 18px;
-  border-radius: 12px;
+  gap: 10px;
+  height: 44px;
+  padding: 0 10px;
+  border-radius: var(--radius);
   color: var(--text);
   text-decoration: none;
   font-size: 17px;
@@ -106,31 +128,34 @@ body {
   transition: background .15s, color .15s;
 }
 .nav a img {
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
   flex-shrink: 0;
 }
-.nav a:hover { background: #f1f5fb; }
+.nav a:hover { background: var(--hover-bg); }
 
 .nav a.active {
-  background: var(--active-bg);
-  color: var(--active-text);
+  background: var(--ink);
+  color: var(--on-ink);
   font-weight: 600;
 }
+/* 아이콘 색은 SVG 안에 고정이라 필터로 흰색 처리 */
+.nav a.active img { filter: brightness(0) invert(1); }
 
 /* ===== 메인 영역 (페이지별 내용이 들어갈 자리) ===== */
 .main {
   flex: 1;
   min-width: 0;
-  padding: 36px 40px;
+  padding: 28px 40px 32px;
 }
 
 /* ===== 반응형 ===== */
 @media (max-width: 960px) {
-  :root { --sidebar-width: 84px; }
+  :root { --sidebar-width: 64px; }
   .profile-info, .profile .chevron, .nav a span { display: none; }
   .profile { justify-content: center; padding: 6px 0; }
   .nav a { justify-content: center; padding: 0; }
+  .main { padding: 24px 24px 28px; }
 }
 
 @media (max-width: 560px) {
@@ -138,12 +163,14 @@ body {
   .sidebar {
     width: 100%;
     flex-direction: row;
-    padding: 8px 10px;
+    padding: 6px 8px;
     gap: 0;
-    border-top: 1px solid #e6ebf3;
+    border-right: none;
+    border-top: 1px solid var(--line);
   }
   .profile { display: none; }
   .nav { flex-direction: row; flex: 1; justify-content: space-around; gap: 4px; }
-  .nav a { height: 48px; flex: 1; }
-  .main { padding: 24px 16px; }
+  .nav a { height: 44px; flex: 1; }
+  .nav a img { width: 22px; height: 22px; }
+  .main { padding: 20px 16px; }
 }
