@@ -27,6 +27,24 @@ tabs.forEach(tab => tab.addEventListener('click', () => {
   fitPrFrame();
 }));
 
+// 전체 탭: 서버(server.py)가 모아 주는 출처별 최신 공지로 각 항목을 채운다
+async function loadNotices() {
+  const notices = await fetch('/api/notices').then(res => res.json()).catch(() => ({}));
+  list.querySelectorAll('.notice-item').forEach(item => {
+    const notice = notices[item.dataset.source];
+    const title = item.querySelector('.notice-title');
+    if (!notice) {
+      title.textContent = '불러오지 못했습니다';
+      return;
+    }
+    title.textContent = notice.title;
+    title.href = notice.url;
+    item.querySelector('.notice-date').textContent = notice.date;
+    item.querySelector('.notice-desc').textContent = notice.desc;
+  });
+}
+loadNotices();
+
 // 인스타 임베드가 보내 주는 높이에 맞춰 블록 높이 설정
 window.addEventListener('message', e => {
   if (e.origin !== 'https://www.instagram.com' || typeof e.data !== 'string') return;
