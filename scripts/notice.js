@@ -2,12 +2,18 @@
 const tabs = document.querySelectorAll('.tab');
 const list = document.getElementById('notice-list');
 const frames = document.getElementById('notice-frames');
+const search = document.querySelector('.search');
 
 tabs.forEach(tab => tab.addEventListener('click', () => {
-  tabs.forEach(t => t.classList.toggle('active', t === tab));
+  tabs.forEach(t => {
+    t.classList.toggle('active', t === tab);
+    t.setAttribute('aria-selected', t === tab);
+  });
   const isAll = tab.dataset.tab === 'all';
   list.hidden = !isAll;
   frames.hidden = isAll;
+  // 검색은 전체 탭 목록에만 적용되므로 다른 탭에서는 숨긴다
+  search.hidden = !isAll;
   frames.dataset.tab = tab.dataset.tab;
   if (isAll) return;
 
@@ -27,21 +33,23 @@ tabs.forEach(tab => tab.addEventListener('click', () => {
   fitPrFrame();
 }));
 
-// 전체 탭: 서버(server.py)가 모아 주는 출처별 최신 공지로 각 항목을 채운다
+// 전체 탭: 서버(server.py)에서 출처별 최신 공지를 받아 각 항목을 채운다
+// 인스타그램은 한꺼번에 조회하면 막히므로 위에서부터 하나씩 받고, 받은 항목부터 바로 보여 준다
 async function loadNotices() {
-  const notices = await fetch('/api/notices').then(res => res.json()).catch(() => ({}));
-  list.querySelectorAll('.notice-item').forEach(item => {
-    const notice = notices[item.dataset.source];
+  for (const item of list.querySelectorAll('.notice-item')) {
+    const notice = await fetch('/api/notices/' + encodeURIComponent(item.dataset.source))
+      .then(res => res.json()).catch(() => null);
     const title = item.querySelector('.notice-title');
+    item.classList.remove('loading');
     if (!notice) {
       title.textContent = '불러오지 못했습니다';
-      return;
+      continue;
     }
     title.textContent = notice.title;
     title.href = notice.url;
     item.querySelector('.notice-date').textContent = notice.date;
     item.querySelector('.notice-desc').textContent = notice.desc;
-  });
+  }
 }
 loadNotices();
 

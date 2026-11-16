@@ -21,6 +21,7 @@
 
 /* 검색 */
 .search { display: flex; align-items: center; gap: 8px; }
+.search[hidden] { display: none; }
 .search-input {
   width: 220px;
   max-width: 50vw;
@@ -94,6 +95,21 @@
   text-overflow: ellipsis;
 }
 .notice-title:hover { text-decoration: underline; }
+/* 불러오는 중: 제목 앞에 돌아가는 로딩 아이콘 */
+.notice-item.loading .notice-title { color: var(--text-sub); }
+.notice-item.loading .notice-title::before {
+  content: '';
+  display: inline-block;
+  width: 0.8em;
+  height: 0.8em;
+  margin-right: 8px;
+  border: 2px solid #d5deeb;
+  border-top-color: var(--active-text);
+  border-radius: 50%;
+  vertical-align: -0.08em;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
 .notice-date {
   flex-shrink: 0;
   font-size: 15px;

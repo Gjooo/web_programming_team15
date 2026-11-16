@@ -62,52 +62,52 @@
       <section class="card">
         <!-- data-src: 출처별 공지 주소, 공백으로 구분 -->
         <div class="tabs" role="tablist">
-          <button class="tab active" type="button" data-tab="all">전체</button>
-          <button class="tab" type="button" data-tab="college" data-src="https://ai.ssu.ac.kr/board/notice">단과대</button>
-          <button class="tab" type="button" data-tab="pr" data-src="https://scatch.ssu.ac.kr/%EA%B3%B5%EC%A7%80%EC%82%AC%ED%95%AD/">홍보센터</button>
-          <button class="tab" type="button" data-tab="insta" data-src="https://www.instagram.com/soongsil1897/embed/ https://www.instagram.com/focussu.66th/embed/ https://www.instagram.com/ai_soongsil/embed/ https://www.instagram.com/ssu_aisw/embed/ https://www.instagram.com/ssu_it_dept/embed/">인스타</button>
+          <button class="tab active" type="button" role="tab" aria-selected="true" data-tab="all">전체</button>
+          <button class="tab" type="button" role="tab" aria-selected="false" data-tab="college" data-src="https://ai.ssu.ac.kr/board/notice">단과대</button>
+          <button class="tab" type="button" role="tab" aria-selected="false" data-tab="pr" data-src="https://scatch.ssu.ac.kr/%EA%B3%B5%EC%A7%80%EC%82%AC%ED%95%AD/">홍보센터</button>
+          <button class="tab" type="button" role="tab" aria-selected="false" data-tab="insta" data-src="https://www.instagram.com/soongsil1897/embed/ https://www.instagram.com/focussu.66th/embed/ https://www.instagram.com/ai_soongsil/embed/ https://www.instagram.com/ssu_aisw/embed/ https://www.instagram.com/ssu_it_dept/embed/">인스타</button>
         </div>
 
         <!-- 전체 공지 모음: 출처마다 가장 최신 공지 하나씩 (인스타는 계정마다 하나) -->
-        <!-- 각 항목은 scripts/notice.js가 server.py의 /api/notices 응답에서 data-source가 같은 공지로 채운다 -->
+        <!-- 각 항목은 scripts/notice.js가 server.py의 /api/notices/<data-source 값> 응답으로 채운다. loading은 채워지면 빠진다 -->
         <ul class="notice-list" id="notice-list">
-          <li class="notice-item" data-source="pr">
+          <li class="notice-item loading" data-source="pr">
             <span class="badge">홍보센터</span>
             <a class="notice-title" target="_blank" rel="noopener">불러오는 중</a>
             <span class="notice-date"></span>
             <p class="notice-desc"></p>
           </li>
-          <li class="notice-item" data-source="college">
+          <li class="notice-item loading" data-source="college">
             <span class="badge">단과대</span>
             <a class="notice-title" target="_blank" rel="noopener">불러오는 중</a>
             <span class="notice-date"></span>
             <p class="notice-desc"></p>
           </li>
-          <li class="notice-item" data-source="insta:soongsil1897">
+          <li class="notice-item loading" data-source="insta:soongsil1897">
             <span class="badge">인스타</span>
             <a class="notice-title" target="_blank" rel="noopener">불러오는 중</a>
             <span class="notice-date"></span>
             <p class="notice-desc"></p>
           </li>
-          <li class="notice-item" data-source="insta:focussu.66th">
+          <li class="notice-item loading" data-source="insta:focussu.66th">
             <span class="badge">인스타</span>
             <a class="notice-title" target="_blank" rel="noopener">불러오는 중</a>
             <span class="notice-date"></span>
             <p class="notice-desc"></p>
           </li>
-          <li class="notice-item" data-source="insta:ai_soongsil">
+          <li class="notice-item loading" data-source="insta:ai_soongsil">
             <span class="badge">인스타</span>
             <a class="notice-title" target="_blank" rel="noopener">불러오는 중</a>
             <span class="notice-date"></span>
             <p class="notice-desc"></p>
           </li>
-          <li class="notice-item" data-source="insta:ssu_aisw">
+          <li class="notice-item loading" data-source="insta:ssu_aisw">
             <span class="badge">인스타</span>
             <a class="notice-title" target="_blank" rel="noopener">불러오는 중</a>
             <span class="notice-date"></span>
             <p class="notice-desc"></p>
           </li>
-          <li class="notice-item" data-source="insta:ssu_it_dept">
+          <li class="notice-item loading" data-source="insta:ssu_it_dept">
             <span class="badge">인스타</span>
             <a class="notice-title" target="_blank" rel="noopener">불러오는 중</a>
             <span class="notice-date"></span>
