@@ -13,7 +13,6 @@ tabs.forEach(tab => tab.addEventListener('click', () => {
 
   // data-src 주소마다 iframe 하나씩 생성
   const urls = (tab.dataset.src || '').split(/\s+/).filter(Boolean);
-  frames.classList.toggle('multi', urls.length > 1);
   frames.replaceChildren(...urls.map(url => {
     const frame = document.createElement('iframe');
     frame.className = 'notice-frame';
@@ -21,7 +20,7 @@ tabs.forEach(tab => tab.addEventListener('click', () => {
     frame.src = url;
 
     // 인스타 탭에서 스크롤 안 생기게
-    if (urls.length > 1) frame.scrolling = 'no';
+    if (tab.dataset.tab === 'insta') frame.scrolling = 'no';
     return frame;
   }));
   fitPrFrame();
