@@ -1,6 +1,7 @@
-# 로컬 실행용 작은 서버: 정적 파일 제공 + 출처별 최신 공지 수집(/api/notices/<출처>)
+# 로컬 실행용 작은 서버: 정적 파일 제공 + 출처별 최신 공지 수집(/api/notices)
 # 실행: pip install -r requirements.txt → python server.py → http://localhost:5500/notice.html
 import re
+import threading
 import time
 from functools import partial
 from itertools import islice
@@ -74,25 +75,46 @@ SOURCES = {'pr': latest_pr, 'college': latest_college}
 for account in ['soongsil1897', 'focussu.66th', 'ai_soongsil', 'ssu_aisw', 'ssu_it_dept']:
     SOURCES['insta:' + account] = partial(latest_insta, account)
 
-# 요청마다 사이트를 다시 긁지 않도록 결과를 보관한다: source → (가져온 시각, 공지)
-# 인스타그램은 자주 조회하면 막히므로 실패한 결과도 같은 시간 동안 보관한다
-CACHE_SECONDS = 30 * 60
+# 마지막으로 가져오는 데 성공한 공지: source → 공지. 새로 가져오는 동안에는 이 결과를 보여 준다
 cache = {}
+# 마지막으로 가져오기를 마친 시각 (아직 한 번도 못 마쳤으면 None)
+checked = None
+# 가져오는 중이면 잠겨 있다. 가져오기는 한 번에 하나만 돈다
+lock = threading.Lock()
 
 
-# 느린 출처(인스타그램)가 빠른 출처를 붙잡지 않도록 출처 하나씩 따로 응답한다
-@app.get('/api/notices/<source>')
-def notice(source):
-    saved = cache.get(source)
-    if not saved or time.time() - saved[0] > CACHE_SECONDS:
-        try:
-            latest = SOURCES[source]()
-        except Exception:
-            # 사이트가 죽거나 구조가 바뀌면 그 항목만 실패로 표시한다
-            latest = None
-        saved = cache[source] = (time.time(), latest)
-    return jsonify(saved[1])
+def refresh():
+    """모든 출처를 차례로 다시 가져온다 (인스타그램은 한꺼번에 조회하면 막힌다)"""
+    global checked
+    try:
+        for source, load in SOURCES.items():
+            try:
+                cache[source] = load()
+            except Exception:
+                # 사이트가 죽거나 구조가 바뀌거나 조회가 막히면 이전 결과를 그대로 둔다
+                pass
+        checked = time.time()
+    finally:
+        lock.release()
+
+
+# 서버를 켤 때와 공지사항 페이지를 열 때 호출된다. 이미 가져오는 중이면 새로 시작하지 않는다
+@app.post('/api/notices/refresh')
+def start_refresh():
+    if lock.acquire(blocking=False):
+        threading.Thread(target=refresh, daemon=True).start()
+    return '', 202
+
+
+@app.get('/api/notices')
+def notices():
+    return jsonify(
+        refreshing=lock.locked(),
+        checked=checked,
+        notices={source: cache.get(source) for source in SOURCES},
+    )
 
 
 if __name__ == '__main__':
+    start_refresh()
     app.run(port=5500)

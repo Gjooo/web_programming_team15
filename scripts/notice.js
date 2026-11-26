@@ -3,6 +3,7 @@ const tabs = document.querySelectorAll('.tab');
 const list = document.getElementById('notice-list');
 const frames = document.getElementById('notice-frames');
 const search = document.querySelector('.search');
+const status = document.getElementById('notice-status');
 
 tabs.forEach(tab => tab.addEventListener('click', () => {
   tabs.forEach(t => {
@@ -11,6 +12,7 @@ tabs.forEach(tab => tab.addEventListener('click', () => {
   });
   const isAll = tab.dataset.tab === 'all';
   list.hidden = !isAll;
+  status.hidden = !isAll;
   frames.hidden = isAll;
   // 검색은 전체 탭 목록에만 적용되므로 다른 탭에서는 숨긴다
   search.hidden = !isAll;
@@ -19,7 +21,6 @@ tabs.forEach(tab => tab.addEventListener('click', () => {
 
   // data-src 주소마다 iframe 하나씩 생성
   const urls = (tab.dataset.src || '').split(/\s+/).filter(Boolean);
-  frames.classList.toggle('multi', urls.length > 1);
   frames.replaceChildren(...urls.map(url => {
     const frame = document.createElement('iframe');
     frame.className = 'notice-frame';
@@ -27,28 +28,47 @@ tabs.forEach(tab => tab.addEventListener('click', () => {
     frame.src = url;
 
     // 인스타 탭에서 스크롤 안 생기게
-    if (urls.length > 1) frame.scrolling = 'no';
+    if (tab.dataset.tab === 'insta') frame.scrolling = 'no';
     return frame;
   }));
   fitPrFrame();
 }));
 
-// 전체 탭: 서버(server.py)에서 출처별 최신 공지를 받아 각 항목을 채운다
-// 인스타그램은 한꺼번에 조회하면 막히므로 위에서부터 하나씩 받고, 받은 항목부터 바로 보여 준다
-async function loadNotices() {
-  for (const item of list.querySelectorAll('.notice-item')) {
-    const notice = await fetch('/api/notices/' + encodeURIComponent(item.dataset.source))
-      .then(res => res.json()).catch(() => null);
+// 전체 탭: 서버(server.py)가 보관 중인 출처별 최신 공지로 각 항목을 채운다
+function showNotices(data) {
+  const time = data.checked &&
+    new Date(data.checked * 1000).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
+  status.classList.toggle('loading', data.refreshing);
+  status.textContent = data.refreshing
+    ? '새로 가져오는 중' + (time ? ' · 마지막 조회 ' + time : '')
+    : '마지막 조회 ' + time;
+
+  list.querySelectorAll('.notice-item').forEach(item => {
+    const notice = data.notices[item.dataset.source];
     const title = item.querySelector('.notice-title');
-    item.classList.remove('loading');
+    // 이전 결과가 없는 항목만 가져오는 동안 로딩으로 둔다
+    item.classList.toggle('loading', !notice && data.refreshing);
     if (!notice) {
-      title.textContent = '불러오지 못했습니다';
-      continue;
+      title.textContent = data.refreshing ? '불러오는 중' : '불러오지 못했습니다';
+      return;
     }
     title.textContent = notice.title;
     title.href = notice.url;
     item.querySelector('.notice-date').textContent = notice.date;
     item.querySelector('.notice-desc').textContent = notice.desc;
+  });
+}
+
+// 페이지를 열면 서버에 다시 가져오라고 하고, 끝날 때까지 2초마다 결과를 받아 온다
+// 가져오는 동안에는 이전 결과가 보이고, 새로 받은 항목부터 바뀐다
+async function loadNotices() {
+  await fetch('/api/notices/refresh', { method: 'POST' }).catch(() => {});
+  while (true) {
+    const data = await fetch('/api/notices').then(res => res.json())
+      .catch(() => ({ refreshing: false, notices: {} }));
+    showNotices(data);
+    if (!data.refreshing) break;
+    await new Promise(resolve => setTimeout(resolve, 2000));
   }
 }
 loadNotices();

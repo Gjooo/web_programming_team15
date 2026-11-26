@@ -1,0 +1,22 @@
+# 파이썬
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+
+# 에디터·OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Syncthing
+.stfolder/
+.stignore
+.stversions/
+*.sync-conflict-*
+
+# 클로드
+.claude/
