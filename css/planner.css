@@ -1,0 +1,23 @@
+.planner { max-width:1240px }
+.planner h1 { font-size:32px; margin-bottom:32px }
+.planner h2 { font-size:21px; margin:20px 0 }
+.planner header,.planner form,.planner li { display:flex; align-items:center; gap:12px }
+.planner header { justify-content:space-between }
+.planner button,.planner input,.planner select { font:inherit; border:1px solid var(--line); background:white; border-radius:6px; padding:9px 12px; color:inherit }
+.planner button { cursor:pointer }
+.planner button:hover { background:var(--hover-bg) }
+.planner .primary,.planner .primary:hover { background:var(--ink); color:white }
+.week,#days { display:grid; grid-template-columns:repeat(7,minmax(0,1fr)) }
+.week { text-align:center; font-size:13px; color:var(--text-sub); padding:10px; background:var(--sidebar-bg) }
+#days { gap:1px; padding:1px; background:var(--line) }
+#days button { border:0; border-radius:0; min-height:72px; padding:8px; display:flex; flex-direction:column; align-items:flex-start; gap:5px }
+#days .selected { box-shadow:inset 0 0 0 2px var(--active-text); background:#eff4fc }
+#days small { color:var(--active-text); font-size:12px }
+.planner form { flex-wrap:wrap; align-items:flex-end; margin:20px 0 }
+.planner form label { display:grid; gap:6px; color:var(--text-sub); font-size:14px }
+.planner form label:first-child { flex:1; min-width:160px }
+.planner li { border-top:1px solid var(--line); padding:14px 0; flex-wrap:wrap }
+.planner li span { flex:1; overflow-wrap:anywhere }
+.planner li small { color:var(--text-sub) }
+.planner li .done { text-decoration:line-through; color:var(--text-sub) }
+@media(max-width:560px){ #days button { min-height:52px; padding:5px } .planner h1 { margin-bottom:16px } }

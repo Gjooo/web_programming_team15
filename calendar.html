@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>캘린더</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/planner.css">
+  <script defer src="scripts/planner.js"></script>
+</head>
+<body>
+  <div class="app">
+    <!-- 왼쪽 메뉴 -->
+    <aside class="sidebar">
+      <button class="profile" type="button" aria-label="계정 메뉴">
+        <div class="avatar">
+          <img src="icons/user.svg" alt="" />
+        </div>
+        <div class="profile-info">
+          <div class="profile-name" id="profile-name">이름</div>
+          <div class="profile-sub" id="profile-sub">학번</div>
+        </div>
+        <img class="chevron" src="icons/chevron-down.svg" alt="" />
+      </button>
+
+      <nav class="nav">
+        <a href="layout.html" aria-label="대시보드">
+          <img src="icons/home.svg" alt="" />
+          <span>대시보드</span>
+        </a>
+        <a href="calendar.html" class="active" aria-current="page" aria-label="캘린더">
+          <img src="icons/calendar.svg" alt="" />
+          <span>캘린더</span>
+        </a>
+        <a href="todo.html" aria-label="할 일">
+          <img src="icons/todo.svg" alt="" />
+          <span>할 일</span>
+        </a>
+        <a href="notice.html" aria-label="공지사항">
+          <img src="icons/notice.svg" alt="" />
+          <span>공지사항</span>
+        </a>
+        <a href="settings.html" aria-label="설정">
+          <img src="icons/settings.svg" alt="" />
+          <span>설정</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- 메인 영역: 페이지별 내용이 들어갈 자리 -->
+    <main class="main planner" data-page="calendar">
+      <h1>캘린더</h1>
+      <section aria-label="월간 달력">
+        <header><h2 id="month"></h2><div><button id="prev" aria-label="이전 달">‹</button> <button id="today">오늘</button> <button id="next" aria-label="다음 달">›</button></div></header>
+        <div class="week"><span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div>
+        <div id="days"></div>
+      </section>
+      <h2 id="selection"></h2>
+      <form id="entry"><label>일정 이름<input id="title" required maxlength="120" autocomplete="off"></label>
+
+      <button class="primary">추가</button></form>
+      <ul id="items" aria-live="polite"></ul>
+    </main>
+  </div>
+</body>
+</html>
